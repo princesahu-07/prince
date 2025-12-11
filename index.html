@@ -3,31 +3,56 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>12-Slide Birthday Surprise 🎂✨</title>
+<title>Birthday Surprise Card 🎂✨</title>
+
 <style>
+    :root{
+        --peach: #ffe5d4;
+        --title: #c05b4d;
+        --btn: #ff9f8c;
+        --card-shadow: #e8b2a3;
+        --pastel-pink: #ffcfe6;
+        --pastel-purple: #cdb7ff;
+        --pastel-yellow: #fff3bf;
+    }
+
     body {
         font-family: "Poppins", sans-serif;
         margin: 0;
-        background: #ffe5d4;
+        background: var(--peach); /* Peach */
         overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
+
     .page {
         display: none;
         height: 100vh;
         width: 100vw;
         padding: 20px;
         text-align: center;
-        animation: fadeIn 0.6s ease-in-out;
+        animation: fadeIn 0.7s ease-in-out;
         box-sizing: border-box;
+        position: relative;
     }
-    .active { display: block; }
+
+    .active {
+        display: block;
+    }
+
     @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(20px);}    
-        to {opacity: 1; transform: translateY(0);}    
+        from {opacity: 0; transform: translateY(20px);}
+        to {opacity: 1; transform: translateY(0);}
     }
-    h1 { font-size: 30px; color: #c05b4d; margin: 10px 0; }
+
+    h1 {
+        font-size: 32px;
+        color: var(--title);
+        margin: 12px 0;
+    }
+
     .btn {
-        background: #ff9f8c;
+        background: var(--btn);
         padding: 12px 25px;
         border-radius: 15px;
         font-size: 18px;
@@ -35,133 +60,316 @@
         margin-top: 20px;
         color: white;
         cursor: pointer;
-        transition: 0.2s;
     }
-    .btn:hover { transform: scale(1.06); }
-    .emoji { font-size: 55px; margin-bottom: 15px; }
+
+    .emoji {
+        font-size: 60px;
+        margin-bottom: 20px;
+    }
+
     .card-box {
         background: white;
         padding: 18px;
         margin: 25px auto;
         border-radius: 15px;
-        box-shadow: 0 0 10px #e8b2a3;
+        box-shadow: 0 0 10px var(--card-shadow);
+        max-width: 800px;
+        text-align: left;
+        color: #4b2f2a;
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    /* Heart rain container (first slide) */
+    .heart-rain {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 5;
+    }
+
+    .heart {
+        position: absolute;
+        top: -5%;
+        font-size: 20px;
+        opacity: 0.95;
+        transform: translateY(-10px);
+        will-change: transform, opacity;
+        animation-name: fall, sway, fadeInSmall;
+        animation-timing-function: linear, ease-in-out, ease-in;
+        animation-iteration-count: infinite, infinite, 1;
+    }
+
+    @keyframes fall {
+        to { transform: translateY(120vh); }
+    }
+    @keyframes sway {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(12px); }
+        100% { transform: translateX(0); }
+    }
+    @keyframes fadeInSmall {
+        from { opacity: 0; transform: scale(0.85) }
+        to { opacity: 0.95; transform: scale(1) }
+    }
+
+    /* Slide-specific tweaks */
+    .subtitle {
+        color: #975044;
+        font-size: 18px;
+    }
+
+    /* second slide decorations row */
+    .decor-row {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        align-items: center;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+    .decor-item {
+        font-size: 32px; /* medium-ish */
+        display: inline-block;
+        transform: translateY(0);
+    }
+
+    /* second slide pastel text */
+    .muted-medium {
+        font-size: 20px;
+        color: var(--pastel-purple);
+        margin-top: 8px;
+        font-weight: 600;
+    }
+
+    /* pastel-pink description */
+    .pastel-pink-desc {
+        color: #b64a6a; /* darker for accessibility, but background is pastel pink */
+        background: var(--pastel-pink);
+        padding: 14px;
+        border-radius: 10px;
+        display: inline-block;
         max-width: 820px;
+        margin-top: 14px;
+        text-align: left;
+        color: #6b2f38;
+        font-size: 17px;
+        line-height: 1.5;
+    }
+
+    /* third slide small emoji area */
+    .small-emoji {
+        font-size: 48px;
+        margin-bottom: 18px;
+    }
+
+    /* fourth slide cursive text */
+    .cursive {
+        font-family: "Brush Script MT", "Lucida Handwriting", cursive, serif;
+        font-size: 18px;
+        color: #000000;
+        text-align: left;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+        .card-box { font-size: 16px; padding: 14px; margin: 16px; }
+        .emoji { font-size: 44px; }
+        .decor-item { font-size: 26px; }
     }
 </style>
 </head>
+
 <body>
 
-<!-- 12 SLIDES -->
+<!-- Page 1 -->
 <div id="page1" class="page active">
-    <div class="emoji">🎉🎈</div>
-    <h1 id="title">Happpiii Birthdayyyy Nidhi ❤️</h1>
-    <p class="card-box">Since it's your special day on the 12th… here are 12 tiny cute slides just for you 🩷</p>
-    <button class="btn" onclick="nextPage()">Start 🎁</button>
-</div>
+    <div class="heart-rain" id="heartRain"></div>
 
-<div id="page2" class="page">
-    <div class="emoji">🌷</div>
-    <h1>Slide 1</h1>
-    <p class="card-box">I hope today brings you calm, peace and much-needed softness ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page3" class="page">
-    <div class="emoji">🩷🌷</div>
-    <h1>Slide 2</h1>
-    <p class="card-box">A gentle reminder: you're appreciated more than you think 🩷</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page4" class="page">
-    <div class="emoji">☕🌸</div>
-    <h1>Slide 3</h1>
-    <p class="card-box">May your day feel as warm as your favourite chai/coffee ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page5" class="page">
-    <div class="emoji">📸🌷</div>
-    <h1>Slide 4</h1>
-    <p class="card-box">I hope you click cute pictures today—your smile deserves it 🩷</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page6" class="page">
-    <div class="emoji">🎶❤️</div>
-    <h1>Slide 5</h1>
-    <p class="card-box">May your playlist today hit different and brighten your mood ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page7" class="page">
-    <div class="emoji">🍫🩷</div>
-    <h1>Slide 6</h1>
-    <p class="card-box">If birthdays had flavours, yours would be chocolate—sweet & classic 🩷</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page8" class="page">
-    <div class="emoji">🌙✨</div>
-    <h1>Slide 7</h1>
-    <p class="card-box">May the night sky today feel extra calm and kind to you ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page9" class="page">
-    <div class="emoji">🌷🩷</div>
-    <h1>Slide 8</h1>
-    <p class="card-box">Soft reminder: You’re doing better than you think 🩷</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page10" class="page">
-    <div class="emoji">🌼❤️</div>
-    <h1>Slide 9</h1>
-    <p class="card-box">May your year be full of tiny wins, subtle joys & good memories ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page11" class="page">
-    <div class="emoji">🌄🩷</div>
-    <h1>Slide 10</h1>
-    <p class="card-box">May every sunrise this year greet you with hope 🩷</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page12" class="page">
-    <div class="emoji">🌟❤️</div>
-    <h1>Slide 11</h1>
-    <p class="card-box">You deserve a year full of peace, progress and happiness ❤️</p>
-    <button class="btn" onclick="nextPage()">Next ➜</button>
-</div>
-
-<div id="page13" class="page">
-    <div class="emoji">🎂🩷</div>
-    <h1>Slide 12</h1>
-    <p class="card-box" id="lastmsg">
-        Happpiii Birthdayyyy Nidhi 🩷<br>
-        I hope this small 12-slide surprise made your day a little brighter 🌷
+    <div class="emoji" aria-hidden="true">🎈🎉🌸🎂</div>
+    <h1 id="title">Wishing You Happpiii Birthdayyyy Nidhi 🎈</h1>
+    <p class="subtitle">
+        A little surprise waiting for you — hope you'll like it.
     </p>
+
+    <div class="card-box" style="text-align:center;">
+        <p style="margin:0 0 6px 0;">Open the surprise and enjoy ✨</p>
+        <button class="btn" onclick="nextPage()">Open Surprise 🎁</button>
+    </div>
+</div>
+
+<!-- Page 2 Balloons + Flowers -->
+<div id="page2" class="page">
+    <!-- decoration row: chocolate, balloons, various color hearts (not using 💝 or 💖) -->
+    <div class="decor-row" aria-hidden="true">
+        <div class="decor-item">🍫</div>
+        <div class="decor-item">🎈🎈</div>
+        <div class="decor-item">❤️ 💚 💙 💜 💛</div>
+    </div>
+
+    <h1>Just For You 💐🎂</h1>
+
+    <div class="muted-medium">congratulations on your 19 aur 20th birthday idk know your real so kindly adjust it 😅</div>
+
+    <div class="pastel-pink-desc card-box" style="margin-top:18px;">
+        May your birthday be sprinkled with warm sunshine, easy giggles, and those soft little smiles that show up without warning and make your whole day glow. And may this special day whisper to you gently but adorably that the world feels a tiny bit sweeter just because you’re in it. 💛
+    </div>
+
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<!-- Page 3 Wizard emoji and wish -->
+<div id="page3" class="page">
+    <div class="small-emoji">🧙🏻🤞🏻</div>
+    <h1>Make a Wish ✨</h1>
+
+    <div class="card-box">
+        <p style="margin:0 0 10px 0; font-weight:600;">
+            I may not know what you’re wishing for, but I really hope the thing your heart is asking for reaches you soon. 🌷
+        </p>
+
+        <p style="margin:0 0 12px 0;">
+            Close your eyes for a moment and make a small wish — the kind that quietly sits in your heart. Let it float out into the world, nice and easy. And I really hope it finds you today, in the simplest, sweetest way… and keeps bringing little moments of happiness your way for a long, long time. 🤞🏻🩷
+        </p>
+
+        <button class="btn" onclick="nextPage()">Next ➜</button>
+    </div>
+</div>
+
+<!-- Page 4 Birthday Letter -->
+<div id="page4" class="page">
+    <div class="emoji">💌</div>
+    <h1>This is a small message from me 💌</h1>
+
+    <div class="card-box">
+        <p class="cursive" style="color:#000000;">
+First of all, a very happy, happy birthday to you, Nidhi. You’ve probably forgotten me by now, but this is just a small gift from my side, something I hope brings a little smile to your face. I won’t say much, but wherever you are, I genuinely wish you happiness. Enjoy your special day… and your life too. I didn’t add any photos of us because we don’t really have any special pictures or memories together, and I even thought about taking a picture from your Instagram, but it felt like invading your privacy, so I chose not to. I just hope you’ll like this small gesture, and even if we don’t talk much anymore, I still wish that kindness and good things keep finding you. Take care, and have a beautiful birthday. ^_^
+        </p>
+
+        <p style="margin-top:14px; font-weight:700; text-align:center;">Once again Happy Birthday Nidhi 🩷</p>
+    </div>
 </div>
 
 <script>
-let page = 1;
-const totalPages = 13;
-
-function nextPage() {
-    if (page >= totalPages) return; // stop at last slide
-    document.getElementById("page" + page).classList.remove("active");
-    page++;
-    document.getElementById("page" + page).classList.add("active");
-}
-
-// Apply name from URL (fixed syntax error)
+/* Name from URL */
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name") || "Nidhi";
 
-document.getElementById("title").innerText = `Happpiii Birthdayyyy ${name} ❤️`;
-document.getElementById("lastmsg").innerHTML = `Happpiii Birthdayyyy ${name} 🩷<br> I hope this small 12-slide surprise made your day a little brighter 🌷`;
+/* Update dynamic fields using the name */
+document.getElementById("title").innerText =
+    `Wishing You Happpiii Birthdayyyy ${name} 🎈`;
+
+/* Page control */
+let page = 1;
+function nextPage() {
+    // Stop heart rain if leaving page1
+    if (page === 1) stopHeartRain();
+
+    document.getElementById("page" + page).classList.remove("active");
+    page++;
+    const next = document.getElementById("page" + page);
+    if (next) {
+        next.classList.add("active");
+    } else {
+        // if no next, wrap to first (optional) - here we just clamp
+        page = 4;
+        document.getElementById("page4").classList.add("active");
+    }
+}
+
+/* HEART RAIN - custom continuous slow heart confetti (no external CDN)
+   Spawns emoji hearts that fall slowly and continuously on page1.
+   Hearts are moderate size, soft fall, continuous.
+*/
+const heartContainer = document.getElementById('heartRain');
+let heartInterval = null;
+let heartSpawners = [];
+
+function randomBetween(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+const heartEmojis = ['💜','💛','💙','❤','💚']; // varied colors (avoided 💝 and 💖 as requested)
+
+function createHeart() {
+    const span = document.createElement('span');
+    span.className = 'heart';
+    // Choose random heart
+    span.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+
+    // Random horizontal start (0% - 95%)
+    const left = randomBetween(2, 95);
+    span.style.left = left + 'vw';
+
+    // Random size (slightly smaller than big)
+    const size = randomBetween(16, 30); // px
+    span.style.fontSize = size + 'px';
+
+    // Random animation duration (slow)
+    const duration = randomBetween(8, 18); // seconds
+    // We set combined animation with fall and sway durations
+    span.style.animationDuration = `${duration}s, ${randomBetween(3,6)}s, 0.6s`;
+
+    // Slight opacity variation
+    span.style.opacity = (randomBetween(0.7, 1)).toString();
+
+    // Remove after it's done falling
+    span.addEventListener('animationend', function(ev){
+        // only remove if the fall animation ended (safety)
+        if (ev.animationName === 'fall') {
+            span.remove();
+        }
+    });
+
+    heartContainer.appendChild(span);
+
+    // Safety cleanup after a little more than duration
+    setTimeout(() => {
+        if (span && span.parentNode) span.remove();
+    }, (duration + 1) * 1000);
+}
+
+function startHeartRain() {
+    // create a few initial hearts
+    for (let i=0;i<8;i++){
+        setTimeout(createHeart, i * 300);
+    }
+    // then spawn periodically
+    if (!heartInterval) {
+        heartInterval = setInterval(() => {
+            // spawn 1-2 hearts each tick to keep it continuous but gentle
+            const n = Math.random() > 0.6 ? 2 : 1;
+            for (let i=0;i<n;i++) {
+                createHeart();
+            }
+        }, 700);
+    }
+}
+
+function stopHeartRain() {
+    if (heartInterval) {
+        clearInterval(heartInterval);
+        heartInterval = null;
+    }
+    // clear all remaining hearts
+    const hearts = document.querySelectorAll('#heartRain .heart');
+    hearts.forEach(h => h.remove());
+}
+
+/* Start rain automatically on load (first slide) */
+window.addEventListener('load', () => {
+    // If the first page is active, start the hearts
+    if (document.getElementById('page1').classList.contains('active')) {
+        startHeartRain();
+    }
+});
+
 </script>
 
 </body>
