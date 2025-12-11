@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Surprise for you</title>
 
+<!-- Poppins -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -69,6 +70,8 @@
     text-align:center;
     position:relative;
     z-index:4;
+    word-break:break-word;
+    hyphens:none;
   }
 
   .btn{
@@ -91,54 +94,39 @@
     z-index:3;
   }
 
-  /* ⭐ FIXED CONFETTI LAYER */
-  .layer-confetti{
+  /* Heart Rain */
+  .heart-rain{
     position:absolute;
     inset:0;
-    z-index:9999 !important; /* always on top */
-    pointer-events:none;
     overflow:hidden;
+    z-index:2;
+    pointer-events:none;
   }
-
-  /* ⭐ FIXED FALLING confetti */
-  .falling{
-    position:absolute;
-    top:-8%;
-    will-change:transform,opacity;
-    display:inline-block;
-    transform-origin:center;
-    z-index:99999 !important;
-    animation-name:fallDown, swayX, fadeInFast;
-    animation-iteration-count:1, infinite, 1;
-    animation-timing-function: linear, ease-in-out, ease-in;
-  }
-
-  @keyframes fallDown { to{ transform: translateY(120vh) rotate(360deg); } }
-  @keyframes swayX { 
-    0%{ transform:translateX(0); }
-    50%{ transform:translateX(18px); }
-    100%{ transform:translateX(0); }
-  }
-  @keyframes fadeInFast { from{opacity:0;} to{opacity:1;} }
-
-  /* HEART RAIN BACKUP */
-  .heart-rain{ position:absolute; inset:0; overflow:hidden; z-index:2; }
   .heart{
     position:absolute;
     top:-5%;
+    will-change:transform,opacity;
     animation-name:fall,sway,fadeInSmall;
     animation-iteration-count:infinite,infinite,1;
     animation-timing-function:linear,ease-in-out,ease-in;
   }
 
   @keyframes fall{ to{ transform:translateY(120vh);} }
-  @keyframes sway{ 0%{transform:translateX(0);}50%{transform:translateX(12px);}100%{transform:translateX(0);} }
-  @keyframes fadeInSmall{ from{opacity:0;} to{opacity:.95;} }
+  @keyframes sway{
+    0%{ transform:translateX(0); }
+    50%{ transform:translateX(12px); }
+    100%{ transform:translateX(0); }
+  }
+  @keyframes fadeInSmall{
+    from{ opacity:0; transform:scale(.9); }
+    to{ opacity:.95; transform:scale(1); }
+  }
 
   .muted-medium{
     font-size:20px;
     color:var(--pastel-purple);
     font-weight:600;
+    margin-top:6px;
     z-index:3;
     position:relative;
   }
@@ -156,39 +144,53 @@
     z-index:4;
   }
 
+  /* FINAL CLEAN CURSIVE PARAGRAPH (NO HYPHENS EVER) */
   .cursive{
     font-family:"Brush Script MT","Lucida Handwriting","Segoe Script",cursive;
     font-size:18px;
     line-height:1.6;
     color:#000;
+    white-space:normal;
+    margin:0;
+    padding:0 8px;
     hyphens:none;
     -webkit-hyphens:none;
     -ms-hyphens:none;
     word-break:normal;
-    padding:0 8px;
   }
 
   .decor-item{
     position:absolute;
     pointer-events:none;
+    user-select:none;
+  }
+
+  @media(max-width:600px){
+    h1{ font-size:26px; }
+    .emoji{ font-size:44px; }
+    .card-box{ padding:14px; }
+    .subtitle{ font-size:16px; }
+    .cursive{ font-size:17px; }
   }
 </style>
 </head>
 
 <body>
 
+<!-- Background emojis -->
 <div id="decorLayer" class="global-decor"></div>
-<div id="confettiLayer" class="layer-confetti"></div>
-<div id="heartRain" class="heart-rain"></div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
+  <div id="heartRain" class="heart-rain"></div>
+
   <div class="emoji">🎈🎉🌸🎂</div>
   <h1 id="title">Wishing You Happpiii Birthdayyyy Nidhi 🎈</h1>
+
   <p class="subtitle">A little surprise waiting for you. Hope you'll like it.</p>
 
   <div class="card-box">
-    <p>Open the surprise and enjoy ✨</p>
+    <p style="margin:6px 0 12px;">Open the surprise and enjoy ✨</p>
     <button class="btn" onclick="nextPage()">Open Surprise 🎁</button>
   </div>
 </div>
@@ -197,11 +199,9 @@
 <div id="page2" class="page">
   <h1>Just For You 💐🎂</h1>
 
-  <div class="muted-medium">
-    Congratulations on your 19 or 20th birthday — I don't know your real age, so kindly adjust it 😅
-  </div>
+  <div class="muted-medium">Congratulations on your 19 or 20th birthday, I don't know your real age, so kindly adjust it 😅</div>
 
-  <div class="pastel-pink-desc">
+  <div class="pastel-pink-desc card-box">
     May your birthday be sprinkled with warm sunshine, easy giggles, and those soft little smiles that show up without warning and make your whole day glow. And may this special day whisper to you gently but adorably that the world feels a tiny bit sweeter just because you’re in it. 💛
   </div>
 
@@ -214,21 +214,15 @@
   <h1>Make a Wish ✨</h1>
 
   <div class="card-box" style="text-align:left;">
-    <p style="font-weight:600;">
-      I may not know what you’re wishing for, but I really hope the thing your heart is asking for reaches you soon. 🌷
-    </p>
-
-    <p>
+    <p style="font-weight:600;margin-bottom:10px;">I may not know what you’re wishing for, but I really hope the thing your heart is asking for reaches you soon. 🌷</p>
+    <p style="margin:0 0 12px;">
       Close your eyes for a moment and make a small wish, the kind that quietly sits in your heart. Let it float out into the world, nice and easy. And I really hope it finds you today, in the simplest, sweetest way… and keeps bringing little moments of happiness your way for a long, long time. 🤞🏻🩷
     </p>
-
-    <div style="text-align:center;">
-      <button class="btn" onclick="nextPage()">Next ➜</button>
-    </div>
+    <div style="text-align:center;"><button class="btn" onclick="nextPage()">Next ➜</button></div>
   </div>
 </div>
 
-<!-- PAGE 4 -->
+<!-- PAGE 4 (FINAL SINGLE PARAGRAPH — NO HYPHENS) -->
 <div id="page4" class="page">
   <div class="emoji">💌</div>
   <h1>This is a small message from me 💌</h1>
@@ -241,157 +235,83 @@ First of all, a Very Happy, Happy Birthday to you, Nidhi. You’ve probably forg
 </div>
 
 <script>
-/* ---------------- BASIC CONFIG ---------------- */
+/* name param */
+const params = new URLSearchParams(window.location.search);
+const name = params.get('name') || 'Nidhi';
+document.getElementById('title').innerText = `Wishing You Happpiii Birthdayyyy ${name} 🎈`;
+
+/* page control */
 let page = 1;
 function nextPage(){
-  stopEffects(page);
-  document.getElementById("page"+page).classList.remove("active");
+  if(page === 1) stopHeartRain();
+  document.getElementById('page'+page).classList.remove('active');
   page++;
-  document.getElementById("page"+page).classList.add("active");
-  startEffects(page);
+  if(!document.getElementById('page'+page)) page=4;
+  document.getElementById('page'+page).classList.add('active');
 }
 
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "Nidhi";
-document.getElementById("title").innerText =
-  `Wishing You Happpiii Birthdayyyy ${name} 🎈`;
+/* Heart rain */
+const heartContainer=document.getElementById("heartRain");
+let heartInterval=null;
+const heartEmojis=['💜','💛','💙','❤','💚'];
 
-/* ---------------- HEART RAIN BACKUP ---------------- */
-const heartContainer = document.getElementById("heartRain");
-const heartEmojis = ['💜','💛','💙','❤','💚'];
-let heartInterval;
-
-function random(a,b){ return Math.random()*(b-a)+a; }
+function randomBetween(a,b){return Math.random()*(b-a)+a;}
 
 function createHeart(){
   const s=document.createElement("span");
   s.className="heart";
   s.innerText=heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
-  s.style.left=random(5,95)+"vw";
-  s.style.fontSize=Math.floor(random(16,32))+"px";
-  const d=random(10,18);
-  s.style.animationDuration=`${d}s, ${random(3,6)}s, 0.6s`;
+  s.style.left=randomBetween(5,95)+'vw';
+  s.style.fontSize=Math.floor(randomBetween(16,32))+'px';
+  const d=randomBetween(10,18);
+  s.style.animationDuration=`${d}s, ${randomBetween(3,6)}s, 0.6s`;
+  s.style.opacity=randomBetween(0.78,1);
+  s.style.zIndex=2;
   heartContainer.appendChild(s);
-  setTimeout(()=>s.remove(), (d+1)*1000);
+  setTimeout(()=>{ if(s.parentNode) s.remove(); }, (d+1)*1000);
 }
 
 function startHeartRain(){
+  for(let i=0;i<8;i++) setTimeout(createHeart, i*260);
   if(!heartInterval){
     heartInterval=setInterval(()=>{
-      createHeart();
-      if(Math.random()>0.7) createHeart();
+      const n=Math.random()>0.6?2:1;
+      for(let i=0;i<n;i++) createHeart();
     },700);
   }
 }
 
 function stopHeartRain(){
-  clearInterval(heartInterval);
-  heartInterval=null;
-  document.querySelectorAll(".heart").forEach(h=>h.remove());
-}
-
-/* ---------------- CONFETTI ---------------- */
-const confettiLayer=document.getElementById("confettiLayer");
-let confettiInterval;
-let burstTimers=[];
-
-const sets={
-  1:['💜','💛','💙','❤','💚','💗','💖'],
-  2:['🍫','💜','💛','💙','❤','💚'],
-  3:['💜','💛','💙','❤','💚']
-};
-
-function spawn(emoji,left,size,fallDur,swayDur){
-  const el=document.createElement("div");
-  el.className="falling";
-  el.innerText=emoji;
-  el.style.left=left+"vw";
-  el.style.fontSize=size+"px";
-  el.style.animationDuration=`${fallDur}s, ${swayDur}s, 0.4s`;
-  confettiLayer.appendChild(el);
-  setTimeout(()=>el.remove(), (fallDur+0.5)*1000);
-}
-
-function burst(page,count=40){
-  const arr=sets[page];
-  for(let i=0;i<count;i++){
-    const t=setTimeout(()=>{
-      spawn(
-        arr[Math.floor(Math.random()*arr.length)],
-        Math.random()*100,
-        random(20,44),
-        random(6,12),
-        random(3.5,6)
-      );
-    }, Math.random()*300);
-    burstTimers.push(t);
+  if(heartInterval){
+    clearInterval(heartInterval);
+    heartInterval=null;
   }
+  document.querySelectorAll('#heartRain .heart').forEach(h=>h.remove());
 }
 
-function startConfetti(page){
-  stopConfetti();
-  confettiInterval=setInterval(()=>{
-    const arr=sets[page];
-    const n=Math.random()>0.6?2:1;
-    for(let i=0;i<n;i++){
-      spawn(
-        arr[Math.floor(Math.random()*arr.length)],
-        Math.random()*100,
-        random(18,38),
-        random(9,16),
-        random(3.4,6)
-      );
-    }
-  },600);
-}
+window.addEventListener('load',()=>startHeartRain());
 
-function stopConfetti(){
-  clearInterval(confettiInterval);
-  confettiInterval=null;
-  burstTimers.forEach(t=>clearTimeout(t));
-  burstTimers=[];
-  document.querySelectorAll(".falling").forEach(e=>e.remove());
-}
-
-/* ---------------- EFFECT CONTROLLER ---------------- */
-function startEffects(p){
-  if(p===1){
-    startHeartRain();
-    burst(1);
-    setTimeout(()=>startConfetti(1),250);
-  }
-  if(p===2) startConfetti(2);
-  if(p===3) startConfetti(3);
-}
-
-function stopEffects(){
-  stopHeartRain();
-  stopConfetti();
-}
-
-/* ---------------- DECOR ---------------- */
-const decorLayer=document.getElementById("decorLayer");
+/* soft background emojis */
 const decorChars=['🍫','🎈','❤️','💚','💙','💜','💛'];
+const decorLayer=document.getElementById("decorLayer");
 
-function addDecor(n=50){
+function addDecor(n=44){
   decorLayer.innerHTML="";
   for(let i=0;i<n;i++){
     const d=document.createElement("div");
     d.className="decor-item";
     d.innerText=decorChars[Math.floor(Math.random()*decorChars.length)];
-    d.style.left=(Math.random()*100)+"%";
-    d.style.top=(Math.random()*100)+"%";
-    d.style.opacity=(Math.random()*0.12 + 0.05);
-    d.style.fontSize=(22+Math.random()*46)+"px";
+    d.style.left=(Math.random()*100)+'%';
+    d.style.top=(Math.random()*100)+'%';
+    d.style.transform=`translate(-50%,-50%) rotate(${Math.random()*60-30}deg)`;
+    d.style.fontSize=(22+Math.random()*46)+'px';
+    d.style.opacity=(Math.random()*0.12+0.06);
     decorLayer.appendChild(d);
   }
 }
-
-window.onload=()=>{
-  addDecor();
-  startEffects(1);
-};
-window.onresize=()=>addDecor();
+addDecor();
+window.addEventListener('resize',()=>addDecor());
 </script>
+
 </body>
 </html>
