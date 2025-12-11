@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>12‑Slide Birthday Surprise 🎂✨</title>
+
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        background: #ffe5d4;
+        overflow: hidden;
+    }
+
+    .page {
+        display: none;
+        height: 100vh;
+        width: 100vw;
+        padding: 20px;
+        text-align: center;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .active { display: block; }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(20px);}    
+        to {opacity: 1; transform: translateY(0);}    
+    }
+
+    h1 { font-size: 30px; color: #c05b4d; }
+
+    .btn {
+        background: #ff9f8c;
+        padding: 12px 25px;
+        border-radius: 15px;
+        font-size: 18px;
+        border: none;
+        margin-top: 20px;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn:hover { transform: scale(1.08); }
+
+    .emoji { font-size: 55px; margin-bottom: 15px; }
+
+    .card-box {
+        background: white;
+        padding: 18px;
+        margin: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px #e8b2a3;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- 12 SLIDES BELOW -->
+
+<div id="page1" class="page active">
+    <div class="emoji">🎉🎈</div>
+    <h1 id="title">Happpiii Birthdayyyy Nidhi ❤️</h1>
+    <p class="card-box">Since it's your special day on the 12th… here are 12 tiny cute slides just for you 🩷</p>
+    <button class="btn" onclick="nextPage()">Start 🎁</button>
+</div>
+
+<div id="page2" class="page">
+    <div class="emoji">🌷</div>
+    <h1>Slide 1</h1>
+    <p class="card-box">I hope today brings you calm, peace and much‑needed softness ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page3" class="page">
+    <div class="emoji">🩷🌷</div>
+    <h1>Slide 2</h1>
+    <p class="card-box">A gentle reminder: you're appreciated more than you think 🩷</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page4" class="page">
+    <div class="emoji">☕🌸</div>
+    <h1>Slide 3</h1>
+    <p class="card-box">May your day feel as warm as your favourite chai/coffee ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page5" class="page">
+    <div class="emoji">📸🌷</div>
+    <h1>Slide 4</h1>
+    <p class="card-box">I hope you click cute pictures today—your smile deserves it 🩷</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page6" class="page">
+    <div class="emoji">🎶❤️</div>
+    <h1>Slide 5</h1>
+    <p class="card-box">May your playlist today hit different and brighten your mood ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page7" class="page">
+    <div class="emoji">🍫🩷</div>
+    <h1>Slide 6</h1>
+    <p class="card-box">If birthdays had flavours, yours would be chocolate—sweet & classic 🩷</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page8" class="page">
+    <div class="emoji">🌙✨</div>
+    <h1>Slide 7</h1>
+    <p class="card-box">May the night sky today feel extra calm and kind to you ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page9" class="page">
+    <div class="emoji">🌷🩷</div>
+    <h1>Slide 8</h1>
+    <p class="card-box">Soft reminder: You’re doing better than you think 🩷</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page10" class="page">
+    <div class="emoji">🌼❤️</div>
+    <h1>Slide 9</h1>
+    <p class="card-box">May your year be full of tiny wins, subtle joys & good memories ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page11" class="page">
+    <div class="emoji">🌄🩷</div>
+    <h1>Slide 10</h1>
+    <p class="card-box">May every sunrise this year greet you with hope 🩷</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page12" class="page">
+    <div class="emoji">🌟❤️</div>
+    <h1>Slide 11</h1>
+    <p class="card-box">You deserve a year full of peace, progress and happiness ❤️</p>
+    <button class="btn" onclick="nextPage()">Next ➜</button>
+</div>
+
+<div id="page13" class="page">
+    <div class="emoji">🎂🩷</div>
+    <h1>Slide 12</h1>
+    <p class="card-box" id="lastmsg">
+        Happpiii Birthdayyyy Nidhi 🩷<br>
+        I hope this small 12‑slide surprise made your day a little brighter 🌷
+    </p>
+</div>
+
+<script>
+let page = 1;
+
+function nextPage() {
+    document.getElementById("page" + page).classList.remove("active");
+    page++;
+    document.getElementById("page" + page).classList.add("active");
+}
+
+// Name from URL
+t const params = new URLSearchParams(window.location.search);
+const name = params.get("name") || "Nidhi";
+
+document.getElementById("title").innerText = `Happpiii Birthdayyyy ${name} ❤️`;
+document.getElementById("lastmsg").innerHTML = `Happpiii Birthdayyyy ${name} 🩷<br> I hope this small 12‑slide surprise made your day a little brighter 🌷`;
+</script>
+
+</body>
+</html>
