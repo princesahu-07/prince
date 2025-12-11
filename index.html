@@ -94,33 +94,46 @@
     z-index:3;
   }
 
-  /* Heart Rain */
-  .heart-rain{
+  /* CONFETTI + HEART RAIN LAYERS */
+  .layer-confetti {
     position:absolute;
     inset:0;
-    overflow:hidden;
-    z-index:2;
+    z-index:2; /* under cards (z-index 4) but above background (z-index 0) */
     pointer-events:none;
-  }
-  .heart{
-    position:absolute;
-    top:-5%;
-    will-change:transform,opacity;
-    animation-name:fall,sway,fadeInSmall;
-    animation-iteration-count:infinite,infinite,1;
-    animation-timing-function:linear,ease-in-out,ease-in;
+    overflow:hidden;
   }
 
+  .falling {
+    position:absolute;
+    top:-8%;
+    will-change:transform,opacity;
+    display:inline-block;
+    transform-origin:center;
+    /* animation combined: fall and sway and fade-in */
+    animation-name:fallDown, swayX, fadeInFast;
+    animation-iteration-count:1, infinite, 1;
+    animation-timing-function: linear, ease-in-out, ease-in;
+  }
+
+  @keyframes fallDown {
+    to { transform: translateY(120vh) rotate(360deg); }
+  }
+  @keyframes swayX {
+    0% { transform: translateX(0px); }
+    50% { transform: translateX(18px); }
+    100% { transform: translateX(0px); }
+  }
+  @keyframes fadeInFast {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* small heart-rain backup (previous) */
+  .heart-rain{ position:absolute; inset:0; overflow:hidden; z-index:2; pointer-events:none; }
+  .heart{ position:absolute; top:-5%; will-change:transform,opacity; animation-name:fall,sway,fadeInSmall; animation-iteration-count:infinite,infinite,1; animation-timing-function:linear,ease-in-out,ease-in; }
   @keyframes fall{ to{ transform:translateY(120vh);} }
-  @keyframes sway{
-    0%{ transform:translateX(0); }
-    50%{ transform:translateX(12px); }
-    100%{ transform:translateX(0); }
-  }
-  @keyframes fadeInSmall{
-    from{ opacity:0; transform:scale(.9); }
-    to{ opacity:.95; transform:scale(1); }
-  }
+  @keyframes sway{ 0%{ transform:translateX(0);} 50%{ transform:translateX(12px);} 100%{ transform:translateX(0);} }
+  @keyframes fadeInSmall{ from{ opacity:0; transform:scale(.9);} to{ opacity:.95; transform:scale(1);} }
 
   .muted-medium{
     font-size:20px;
@@ -170,20 +183,24 @@
     .emoji{ font-size:44px; }
     .card-box{ padding:14px; }
     .subtitle{ font-size:16px; }
-    .cursive{ font-size:17px; }
+    .cursive{ font-size:17px; line-height:1.7; }
   }
 </style>
 </head>
 
 <body>
 
-<!-- Background emojis -->
+<!-- Background emojis (soft) -->
 <div id="decorLayer" class="global-decor"></div>
+
+<!-- confetti layer (emojis falling) -->
+<div id="confettiLayer" class="layer-confetti" aria-hidden="true"></div>
+
+<!-- Heart rain backup -->
+<div id="heartRain" class="heart-rain" aria-hidden="true"></div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
-  <div id="heartRain" class="heart-rain"></div>
-
   <div class="emoji">🎈🎉🌸🎂</div>
   <h1 id="title">Wishing You Happpiii Birthdayyyy Nidhi 🎈</h1>
 
@@ -215,14 +232,14 @@
 
   <div class="card-box" style="text-align:left;">
     <p style="font-weight:600;margin-bottom:10px;">I may not know what you’re wishing for, but I really hope the thing your heart is asking for reaches you soon. 🌷</p>
-    <p style="margin:0 0 12px;">
+    <p style="margin:0 0 12px 0;">
       Close your eyes for a moment and make a small wish, the kind that quietly sits in your heart. Let it float out into the world, nice and easy. And I really hope it finds you today, in the simplest, sweetest way… and keeps bringing little moments of happiness your way for a long, long time. 🤞🏻🩷
     </p>
     <div style="text-align:center;"><button class="btn" onclick="nextPage()">Next ➜</button></div>
   </div>
 </div>
 
-<!-- PAGE 4 (FINAL SINGLE PARAGRAPH — NO HYPHENS) -->
+<!-- PAGE 4 -->
 <div id="page4" class="page">
   <div class="emoji">💌</div>
   <h1>This is a small message from me 💌</h1>
@@ -235,82 +252,171 @@ First of all, a Very Happy, Happy Birthday to you, Nidhi. You’ve probably forg
 </div>
 
 <script>
-/* name param */
+/* ---------- Basics & pages ---------- */
 const params = new URLSearchParams(window.location.search);
 const name = params.get('name') || 'Nidhi';
 document.getElementById('title').innerText = `Wishing You Happpiii Birthdayyyy ${name} 🎈`;
 
-/* page control */
 let page = 1;
 function nextPage(){
-  if(page === 1) stopHeartRain();
-  document.getElementById('page'+page).classList.remove('active');
+  stopAllEffectsForPage(page);
+  document.getElementById('page' + page).classList.remove('active');
   page++;
-  if(!document.getElementById('page'+page)) page=4;
-  document.getElementById('page'+page).classList.add('active');
+  if(!document.getElementById('page' + page)) page = 4;
+  document.getElementById('page' + page).classList.add('active');
+  startAllEffectsForPage(page);
 }
 
-/* Heart rain */
-const heartContainer=document.getElementById("heartRain");
-let heartInterval=null;
-const heartEmojis=['💜','💛','💙','❤','💚'];
-
-function randomBetween(a,b){return Math.random()*(b-a)+a;}
-
+/* ---------- Heart rain backup (optional) ---------- */
+const heartContainer = document.getElementById("heartRain");
+let heartInterval = null;
+const heartEmojis = ['💜','💛','💙','❤','💚'];
+function randomBetween(a,b){ return Math.random()*(b-a)+a; }
 function createHeart(){
-  const s=document.createElement("span");
-  s.className="heart";
-  s.innerText=heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
-  s.style.left=randomBetween(5,95)+'vw';
-  s.style.fontSize=Math.floor(randomBetween(16,32))+'px';
-  const d=randomBetween(10,18);
-  s.style.animationDuration=`${d}s, ${randomBetween(3,6)}s, 0.6s`;
-  s.style.opacity=randomBetween(0.78,1);
-  s.style.zIndex=2;
+  const s=document.createElement('span');
+  s.className='heart';
+  s.innerText = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+  s.style.left = randomBetween(5,95) + 'vw';
+  s.style.fontSize = Math.floor(randomBetween(16,32)) + 'px';
+  const d = randomBetween(10,18);
+  s.style.animationDuration = `${d}s, ${randomBetween(3,6)}s, 0.6s`;
+  s.style.opacity = randomBetween(0.78,1);
+  s.style.zIndex = 2;
   heartContainer.appendChild(s);
   setTimeout(()=>{ if(s.parentNode) s.remove(); }, (d+1)*1000);
 }
-
 function startHeartRain(){
   for(let i=0;i<8;i++) setTimeout(createHeart, i*260);
   if(!heartInterval){
-    heartInterval=setInterval(()=>{
-      const n=Math.random()>0.6?2:1;
+    heartInterval = setInterval(()=>{
+      const n = Math.random()>0.6 ? 2 : 1;
       for(let i=0;i<n;i++) createHeart();
-    },700);
+    }, 700);
   }
 }
-
 function stopHeartRain(){
-  if(heartInterval){
-    clearInterval(heartInterval);
-    heartInterval=null;
-  }
+  if(heartInterval){ clearInterval(heartInterval); heartInterval = null; }
   document.querySelectorAll('#heartRain .heart').forEach(h=>h.remove());
 }
 
-window.addEventListener('load',()=>startHeartRain());
+/* ---------- Confetti system (emoji falling) ---------- */
+const confettiLayer = document.getElementById('confettiLayer');
+let confettiInterval = null;
+let burstTimeouts = [];
 
-/* soft background emojis */
-const decorChars=['🍫','🎈','❤️','💚','💙','💜','💛'];
-const decorLayer=document.getElementById("decorLayer");
+// sets for each page
+const sets = {
+  1: ['💜','💛','💙','❤','💚','💗','💖'],
+  2: ['🍫','💜','💛','💙','❤','💚'],
+  3: ['💜','💛','💙','❤','💚']
+};
 
+function spawnConfettiEmoji(emoji, leftVw, sizePx, fallDurationSec, swayDurationSec, rotateStart){
+  const el = document.createElement('div');
+  el.className = 'falling';
+  el.innerText = emoji;
+  el.style.left = leftVw + 'vw';
+  el.style.fontSize = sizePx + 'px';
+  // animation durations: fallDuration (single-run), swayDuration (infinite), fade in (0.4s)
+  el.style.animationDuration = `${fallDurationSec}s, ${swayDurationSec}s, 0.45s`;
+  el.style.opacity = 0;
+  el.style.transform = `rotate(${rotateStart}deg)`;
+  confettiLayer.appendChild(el);
+  // cleanup after fall completes
+  setTimeout(()=>{ if(el && el.parentNode) el.remove(); }, (fallDurationSec + 0.6) * 1000);
+  return el;
+}
+
+function confettiBurstForPage(p, count = 40){
+  const arr = sets[p] || sets[1];
+  for(let i=0;i<count;i++){
+    const left = Math.random()*100;
+    const size = Math.floor(randomBetween(18,44));
+    const dur = randomBetween(6,11); // burst pieces fall faster but still slow
+    const sway = randomBetween(3.5,6);
+    const rot = Math.floor(Math.random()*360);
+    const emoji = arr[Math.floor(Math.random()*arr.length)];
+    const t = setTimeout(()=> spawnConfettiEmoji(emoji, left, size, dur, sway, rot), Math.random()*240);
+    burstTimeouts.push(t);
+  }
+}
+
+function startConfettiRainForPage(p){
+  stopConfettiRain(); // safety
+  // spawn gently every tick
+  confettiInterval = setInterval(()=>{
+    const arr = sets[p] || sets[1];
+    const n = Math.random() > 0.7 ? 3 : (Math.random()>0.5?2:1);
+    for(let i=0;i<n;i++){
+      const left = Math.random()*100;
+      const size = Math.floor(randomBetween(18,38));
+      const dur = randomBetween(9,16); // slow fall
+      const sway = randomBetween(3.5,6);
+      const rot = Math.floor(Math.random()*360);
+      const emoji = arr[Math.floor(Math.random()*arr.length)];
+      spawnConfettiEmoji(emoji, left, size, dur, sway, rot);
+    }
+  }, 600);
+}
+
+function stopConfettiRain(){
+  if(confettiInterval){ clearInterval(confettiInterval); confettiInterval = null; }
+  burstTimeouts.forEach(t=>clearTimeout(t));
+  burstTimeouts = [];
+  // remove existing confetti nodes
+  document.querySelectorAll('#confettiLayer .falling').forEach(n=>n.remove());
+}
+
+/* ---------- Start/stop per page helpers ---------- */
+function startAllEffectsForPage(p){
+  if(p === 1){
+    // page1: burst + slow rain + heart backup
+    startHeartRain();
+    confettiBurstForPage(1, 40); // initial burst
+    setTimeout(()=> startConfettiRainForPage(1), 250); // then gentle rain
+  } else if(p === 2){
+    // page2: hearts + chocolate rain
+    startConfettiRainForPage(2);
+  } else if(p === 3){
+    startConfettiRainForPage(3);
+  } else {
+    // page4: none
+  }
+}
+
+function stopAllEffectsForPage(p){
+  stopConfettiRain();
+  stopHeartRain();
+}
+
+/* ---------- Background decorative emojis (soft) ---------- */
+const decorChars = ['🍫','🎈','❤️','💚','💙','💜','💛'];
+const decorLayer = document.getElementById('decorLayer');
 function addDecor(n=44){
-  decorLayer.innerHTML="";
+  decorLayer.innerHTML = '';
   for(let i=0;i<n;i++){
-    const d=document.createElement("div");
-    d.className="decor-item";
-    d.innerText=decorChars[Math.floor(Math.random()*decorChars.length)];
-    d.style.left=(Math.random()*100)+'%';
-    d.style.top=(Math.random()*100)+'%';
-    d.style.transform=`translate(-50%,-50%) rotate(${Math.random()*60-30}deg)`;
-    d.style.fontSize=(22+Math.random()*46)+'px';
-    d.style.opacity=(Math.random()*0.12+0.06);
+    const d = document.createElement('div');
+    d.className = 'decor-item';
+    d.innerText = decorChars[Math.floor(Math.random()*decorChars.length)];
+    d.style.left = (Math.random()*100) + '%';
+    d.style.top = (Math.random()*100) + '%';
+    d.style.transform = `translate(-50%,-50%) rotate(${Math.random()*60-30}deg)`;
+    d.style.fontSize = (22 + Math.random()*46) + 'px';
+    d.style.opacity = (Math.random()*0.12 + 0.06);
     decorLayer.appendChild(d);
   }
 }
-addDecor();
-window.addEventListener('resize',()=>addDecor());
+
+/* ---------- Init ---------- */
+window.addEventListener('load', ()=>{
+  addDecor();
+  startAllEffectsForPage(1); // start confetti for slide1 immediately
+});
+window.addEventListener('resize', ()=> addDecor());
+
+/* small safety to avoid focus outlines causing scroll */
+window.addEventListener('click', ()=>{ document.activeElement && document.activeElement.blur && document.activeElement.blur(); });
+
 </script>
 
 </body>
